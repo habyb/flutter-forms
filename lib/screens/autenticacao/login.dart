@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterforms/screens/dashboard/dashboard.dart';
 
 class Login extends StatelessWidget {
   final TextEditingController _cpfController = TextEditingController();
@@ -26,7 +27,7 @@ class Login extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Container(
                   width: 300,
-                  height: 430,
+                  height: 455,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
@@ -66,12 +67,37 @@ class Login extends StatelessWidget {
                           child: OutlinedButton(
                             child: Text('CONTINUAR'),
                             style: OutlinedButton.styleFrom(
-                              primary: Theme.of(context).accentColor
-                            ),
+                                primary: Theme.of(context).accentColor),
                             onPressed: () {
-                              print('Pressed');
+                              if (_validaCampos()) {
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Dashboard(),
+                                    ),
+                                    (route) => false);
+                              }
                             },
                           ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          'Esqueci minha senha >',
+                          style: TextStyle(
+                            color: Theme.of(context).accentColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        OutlinedButton(
+                          child: Text('Criar uma conta >'),
+                          style: OutlinedButton.styleFrom(
+                              primary: Theme.of(context).accentColor),
+                          onPressed: () {},
                         ),
                       ],
                     ),
@@ -87,5 +113,12 @@ class Login extends StatelessWidget {
       ),
       backgroundColor: Theme.of(context).accentColor,
     );
+  }
+
+  bool _validaCampos() {
+    if (_cpfController.text.length > 0 && _senhaController.text.length > 0)
+      return true;
+
+    return false;
   }
 }
