@@ -1,9 +1,12 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutterforms/screens/dashboard/dashboard.dart';
 
 class Login extends StatelessWidget {
   final TextEditingController _cpfController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -33,92 +36,8 @@ class Login extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Faça seu Login',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        TextField(
-                          decoration: InputDecoration(labelText: 'CPF'),
-                          maxLength: 11,
-                          keyboardType: TextInputType.number,
-                          controller: _cpfController,
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        TextField(
-                          decoration: InputDecoration(labelText: 'Senha'),
-                          maxLength: 15,
-                          keyboardType: TextInputType.text,
-                          controller: _senhaController,
-                        ),
-                        SizedBox(height: 30),
-                        SizedBox(
-                          width: double.infinity,
-                          child: OutlinedButton(
-                            child: Text('CONTINUAR'),
-                            style: OutlinedButton.styleFrom(
-                                primary: Theme.of(context).accentColor),
-                            onPressed: () {
-                              if (_validaCampos()) {
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Dashboard(),
-                                    ),
-                                    (route) => false);
-                              } else {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text('ATENÇÃO'),
-                                      content: Text('CPF ou Senha incorretos!'),
-                                      actions: [
-                                        TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text('Fechar'))
-                                      ],
-                                    );
-                                  },
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          'Esqueci minha senha >',
-                          style: TextStyle(
-                            color: Theme.of(context).accentColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 25,
-                        ),
-                        OutlinedButton(
-                          child: Text('Criar uma conta >'),
-                          style: OutlinedButton.styleFrom(
-                              primary: Theme.of(context).accentColor),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                  ),
+                      padding: const EdgeInsets.all(20),
+                      child: _construirFormulario(context)),
                 ),
               ),
               SizedBox(
@@ -132,10 +51,113 @@ class Login extends StatelessWidget {
     );
   }
 
-  bool _validaCampos() {
-    if (_cpfController.text.length > 0 && _senhaController.text.length > 0)
-      return true;
-
-    return false;
+  _construirFormulario(context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          Text(
+            'Faça seu Login',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          TextFormField(
+            decoration: InputDecoration(labelText: 'CPF'),
+            maxLength: 14,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              CpfInputFormatter(),
+            ],
+            validator: (value) {
+              if (value.length == 0) {
+                return 'informe o CPF!';
+              } else if (value.length < 14) {
+                return 'CPF inválido!';
+              } else {
+                return null;
+              }
+            },
+            keyboardType: TextInputType.number,
+            controller: _cpfController,
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          TextFormField(
+            decoration: InputDecoration(labelText: 'Senha'),
+            maxLength: 15,
+            validator: (value) {
+              if (value.length == 0) {
+                return 'informe uma Senha!';
+              } else {
+                return null;
+              }
+            },
+            keyboardType: TextInputType.text,
+            controller: _senhaController,
+          ),
+          SizedBox(height: 30),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              child: Text('CONTINUAR'),
+              style: OutlinedButton.styleFrom(
+                  primary: Theme.of(context).accentColor),
+              onPressed: () {
+                if (_formKey.currentState.validate()) {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Dashboard(),
+                    ),
+                    (route) => false);
+                }// else {
+                //   showDialog(
+                //     context: context,
+                //     builder: (BuildContext context) {
+                //       return AlertDialog(
+                //         title: Text('ATENÇÃO'),
+                //         content: Text('CPF ou Senha incorretos!'),
+                //         actions: [
+                //           TextButton(
+                //               onPressed: () {
+                //                 Navigator.pop(context);
+                //               },
+                //               child: Text('Fechar'))
+                //         ],
+                //       );
+                //     },
+                //   );
+                // }
+              },
+            ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Text(
+            'Esqueci minha senha >',
+            style: TextStyle(
+              color: Theme.of(context).accentColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(
+            height: 25,
+          ),
+          OutlinedButton(
+            child: Text('Criar uma conta >'),
+            style: OutlinedButton.styleFrom(
+                primary: Theme.of(context).accentColor),
+            onPressed: () {},
+          ),
+        ],
+      ),
+    );
   }
 }
