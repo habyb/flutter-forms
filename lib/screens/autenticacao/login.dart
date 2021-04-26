@@ -76,6 +76,23 @@ class Login extends StatelessWidget {
                                       builder: (context) => Dashboard(),
                                     ),
                                     (route) => false);
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('ATENÇÃO'),
+                                      content: Text('CPF ou Senha incorretos!'),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text('Fechar'))
+                                      ],
+                                    );
+                                  },
+                                );
                               }
                             },
                           ),
