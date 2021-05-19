@@ -1,6 +1,7 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutterforms/components/mensagem.dart';
 import 'package:flutterforms/screens/dashboard/dashboard.dart';
 
 class Login extends StatelessWidget {
@@ -110,30 +111,21 @@ class Login extends StatelessWidget {
                   primary: Theme.of(context).accentColor),
               onPressed: () {
                 if (_formKey.currentState.validate()) {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Dashboard(),
-                    ),
-                    (route) => false);
-                }// else {
-                //   showDialog(
-                //     context: context,
-                //     builder: (BuildContext context) {
-                //       return AlertDialog(
-                //         title: Text('ATENÇÃO'),
-                //         content: Text('CPF ou Senha incorretos!'),
-                //         actions: [
-                //           TextButton(
-                //               onPressed: () {
-                //                 Navigator.pop(context);
-                //               },
-                //               child: Text('Fechar'))
-                //         ],
-                //       );
-                //     },
-                //   );
-                // }
+                  if (_cpfController.text == '111.111.111-11' &&
+                      _senhaController.text == 'abc123') {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Dashboard(),
+                        ),
+                        (route) => false);
+                  } else {
+                    exibirAlerta(
+                        context: context,
+                        title: 'ATENÇÂO',
+                        content: 'CPF ou Senha incorretos');
+                  }
+                }
               },
             ),
           ),
