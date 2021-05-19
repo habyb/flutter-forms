@@ -1,7 +1,9 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutterforms/components/mensagem.dart';
+import 'package:flutterforms/screens/autenticacao/registrar.dart';
 import 'package:flutterforms/screens/dashboard/dashboard.dart';
 
 class Login extends StatelessWidget {
@@ -146,7 +148,12 @@ class Login extends StatelessWidget {
             child: Text('Criar uma conta >'),
             style: OutlinedButton.styleFrom(
                 primary: Theme.of(context).accentColor),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Registrar()),
+              );
+            },
           ),
         ],
       ),
