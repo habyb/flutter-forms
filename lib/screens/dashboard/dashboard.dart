@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutterforms/screens/autenticacao/login.dart';
 import 'package:flutterforms/screens/dashboard/saldo.dart';
 import 'package:flutterforms/screens/deposito/formulario.dart';
 import 'package:flutterforms/screens/transferencia/formulario.dart';
@@ -53,6 +54,23 @@ class Dashboard extends StatelessWidget {
             ],
           ),
           UltimasTransferencias(),
+          Column(
+            children: [
+              ElevatedButton(
+                child: Text('Sair'),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.green, // background
+                  onPrimary: Colors.white, // foreground
+                ),
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil(context,
+                      MaterialPageRoute(builder: (context) {
+                    return Login();
+                  }), (route) => false);
+                },
+              ),
+            ],
+          ),
         ],
       ),
     );
